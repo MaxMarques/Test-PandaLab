@@ -1,10 +1,11 @@
 const express = require("express");
 const { setPosts, getPosts, editPost, deletePost, likePost, dislikePost } = require("../controllers/post.controllers");
-const router  = express.Router();
+const authorize = require("../middleware/middleware");
+const router = express.Router();
 
 //CRUD
 router.get("/", getPosts);
-router.post("/", setPosts);
+router.post("/", authorize, setPosts);
 router.put("/:id", editPost);
 router.delete("/:id", deletePost);
 

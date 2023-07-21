@@ -12,7 +12,7 @@ module.exports.setPosts = async (req, res) => {
 
     const post = await PostModel.create({
         message: req.body.message,
-        author: req.body.author
+        author: req.user.username
     });
 
     res.status(200).json(post)

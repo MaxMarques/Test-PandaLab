@@ -220,19 +220,14 @@ export default {
     async deletePost(postId) {
       try {
         await axios.delete(`http://localhost:3000/post/${this.posts[postId]._id}`);
-
-        // If the request is successful, remove the post from the local posts array
         const index = this.posts.findIndex((post) => post._id === postId);
         if (index !== -1) {
           this.posts.splice(index, 1);
         }
-
-        // Show a success message using the showAlert method
         this.showAlert('Post deleted successfully!', 'success');
         await this.getPost();
       } catch (error) {
         console.error('API error:', error);
-        // Show an error message using the showAlert method
         this.showAlert('An error occurred while deleting the post.', 'error');
       }
     },

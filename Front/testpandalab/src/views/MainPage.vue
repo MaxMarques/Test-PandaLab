@@ -14,7 +14,8 @@
       </v-btn>
     </v-app-bar>
     <v-row class="justify-center">
-      <!-- Textfield ecrire message -->
+
+      <!-- Card to write the messages -->
       <v-col cols="12" sm="8" md="6" lg="4">
         <v-card v-if="isLogged" class="mx-auto">
           <v-card-text>
@@ -28,7 +29,7 @@
     <v-row class="justify-center">
       <v-col cols="12" sm="8" md="6" lg="4">
 
-        <!-- card Afficher message -->
+        <!-- Card to display messages -->
         <v-card v-if="isLogged" v-for="(post, index) in posts" :key="index" class="mx-auto mt-6" max-width="600">
           <v-card-title class="d-flex justify-space-between">
             <span class="headline font-weight-bold">{{ post.author }}</span>
@@ -47,7 +48,9 @@
           </v-card-text>
           <v-card-actions class="likes-container d-flex align-items-center justify-start">
             <div class="d-flex align-items-center">
-              <v-icon class="heart-icon" color="#FC4445">mdi-heart-outline</v-icon>
+              <v-icon v-if="fetchPosts(index) == false" @click="likepost(index)" class="heart-icon" color="#FC4445">mdi-heart-outline</v-icon>
+              <v-icon v-if="fetchPosts(index) == true" @click="dislikepost(index)" class="heart-icon" color="#FC4445">mdi-heart</v-icon>
+
               <span class="likes-count">{{ post.likers.length }}</span>
             </div>
             <v-spacer></v-spacer>
@@ -73,12 +76,12 @@
           </v-card-text>
         </v-card>
 
-        <!-- Message d'alerte -->
+        <!-- Alert message -->
         <div :class="['alert-container', isAlertVisible ? 'isAlertVisible' : '']">
           {{ alertMessage }}
         </div>
 
-        <!-- Formulaire de connexion -->
+        <!-- Login form -->
         <v-card v-if="activeForm === 'login' && !isLogged" class="mx-auto mt-6" max-width="600">
           <v-card-title>
             <span class="headline">Connexion</span>
@@ -95,7 +98,7 @@
           </v-card-actions>
         </v-card>
 
-        <!-- Formulaire d'inscription -->
+        <!-- Registration Form -->
         <v-card v-if="activeForm === 'register' && !isLogged" class="mx-auto mt-6" max-width="600">
           <v-card-title>
             <span class="headline">Inscription</span>
@@ -138,6 +141,7 @@ export default {
       alertType: '',
       messagePost: '',
       username: '',
+      isLikedByCurrentUser: false,
     };
   },
   mounted() {
@@ -230,6 +234,30 @@ export default {
         console.error('API error:', error);
         this.showAlert('An error occurred while deleting the post.', 'error');
       }
+    },
+    async likepost(postId) {
+      try {
+        await axios.patch(`http://localhost:3000/post/like-post/${this.posts[postId]._id}`, {
+          userId: this.username
+        });
+        await this.getPost();
+      } catch (error) {
+        console.error('API error:', error);
+      }
+    },
+    async dislikepost(postId) {
+      try {
+        await axios.patch(`http://localhost:3000/post/dislike-post/${this.posts[postId]._id}`, {
+          userId: this.username
+        });
+        await this.getPost();
+      } catch (error) {
+        console.error('API error:', error);
+      }
+    },
+    fetchPosts(index) {
+        this.isLikedByCurrentUser = this.posts[index].likers.includes(this.username);
+        return(this.isLikedByCurrentUser);
     },
     logout() {
       localStorage.clear();

@@ -16,7 +16,6 @@ module.exports.register = async (req, res) => {
         }).then(user =>
             res.status(200).json({
             message: "Created!",
-            user,
             })
         )
     } catch (err) {
@@ -53,7 +52,7 @@ module.exports.login = async (req, res) => {
             res.status(200).json({
                 message: "Login successful",
                 token,
-                user,
+                user: user.username,
             })
         }
     } catch (err) {

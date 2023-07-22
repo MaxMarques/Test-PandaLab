@@ -66,13 +66,13 @@
           </v-card-actions>
         </v-card>
 
-        <!-- quand il n'y a pas de message -->
+        <!-- when there is no message -->
         <v-card v-if="isLogged && !posts.length" class="mx-auto mt-6" max-width="600">
           <v-card-title>
-            <span class="headline">No Posts Available</span>
+            <span class="headline">Aucune publication disponible</span>
           </v-card-title>
           <v-card-text>
-            <p>There are no posts available.</p>
+            <p>Il n'y a pas de messages disponibles.</p>
           </v-card-text>
         </v-card>
 

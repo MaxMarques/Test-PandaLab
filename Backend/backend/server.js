@@ -11,7 +11,7 @@ const app = express();
 
 // Middlezare: processes the data from the request
 app.use(express.json());
-app.use(express.urlencoded({ extrended: false }));
+app.use(express.urlencoded({ extended: false }));
 app.use(cors());
 
 app.use("/post", require("./routes/post.routes"));
